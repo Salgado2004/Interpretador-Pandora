@@ -17,6 +17,9 @@ export default class Nodo{
   /* Um nodo só pode executar quando todas as suas entradas receberam valores.
      Constantes são a exceção: seu valor já está armazenado na primeira entrada. */
   pronto() {
+    if (this.type === 'visor') {
+      return this.entradas.some((entrada) => entrada !== '');
+    }
     return this.type === 'const' || this.entradas.length > 0 && this.entradas.every((entrada) => entrada !== '');
   }
 
@@ -68,6 +71,20 @@ export default class Nodo{
       case 'maio':
         resultado = primeira > segunda;
         break;
+      case 'disor':
+        if (typeof primeira !== 'boolean') {
+          throw new Error(`Condicional disor exige um valor lógico no nodo ${this.idx}`);
+        }
+        resultado = primeira;
+        break;
+      case 'visor': {
+        const entradaDisponivel = this.entradas.find((entrada) => entrada !== '');
+        if (entradaDisponivel === undefined) {
+          throw new Error(`Visor sem resultado disponível no nodo ${this.idx}`);
+        }
+        resultado = entradaDisponivel;
+        break;
+      }
       case 'encp': {
         const nomeFuncao = this.ligacoes.find((ligacao) => typeof ligacao === 'string');
         if (!nomeFuncao) throw new Error(`Chamada encp sem nome de função no nodo ${this.idx}`);
