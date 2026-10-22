@@ -142,7 +142,7 @@
           "idx"   : 7,
           "tipo"  : "const",
           "ligacoes" : [ 9 ],
-          "inputs"   : [ 1 ],
+          "inputs"   : [ 3 ],
           "outputs"  : [ "" ]
         },{
           "idx"   : 8,
