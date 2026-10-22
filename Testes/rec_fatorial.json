@@ -1,11 +1,9 @@
 {
-  // Arquivo de Entrada
   "nome" : "media_3_val",
   "entradas" : [ 6 ],
   "estado"   : 0,
-  /* Lista de funções que serão executadas*/
   "lista"    : [
-    { // Função fatorial
+    { 
       "id"        : 0,
       "chamada"   : "fatorial",
       "estado"    : 0, 
