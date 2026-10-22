@@ -6,12 +6,12 @@
   5) Saída do nodo, é o valor de saída do nodo.
 */
 export default class Nodo{
-  constructor(length, type){
-    this.idx        =   length;       // 1) 
-    this.type       =   type;         // 2)
-    this.ligacoes   =   new Array();  // 3) Lista de nodos que recebem o output deste nodo (Grafo - Lista de adjacência)
-    this.entradas   =   new Array();  // 4) Entradas do nodo
-    this.saidas     =   "";           // 5) Saída do nodo
+  constructor(dados = {}){
+    this.idx        = dados.idx ?? 0;                       // 1)
+    this.type       = dados.type ?? dados.tipo ?? '';       // 2)
+    this.ligacoes   = dados.ligacoes ?? [];                 // 3) Lista de nodos seguintes
+    this.entradas   = dados.entradas ?? dados.inputs ?? []; // 4) Entradas do nodo
+    this.saidas     = dados.saidas ?? dados.outputs ?? [];   // 5) Saída do nodo
   }
 }
 /* Lista de tipos

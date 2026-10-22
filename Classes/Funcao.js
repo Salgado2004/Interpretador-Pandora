@@ -1,3 +1,5 @@
+import Nodo from './Nodo.js';
+
 /* Definições da função: 
   1) ID da função = [index].
   2) Nome da função e chamada.
@@ -9,13 +11,13 @@
     4 = finalizado com sucesso
 */
 export default class Funcao{
-  constructor(index, nome){
-    this.id       = index;                // 1)
-    this.chamada  = nome;                 // 2)
-    this.estado   = 0;                    // 3)
-    this.entradas = new Array();          // 4)
-    this.grafo    = new Array();          // 5)
-    this.saidas   = new Array();          // 6)
+  constructor(dados = {}, index = 0){
+    this.id       = dados.id ?? index;    // 1)
+    this.chamada  = dados.chamada ?? '';  // 2)
+    this.estado   = dados.estado ?? 0;    // 3)
+    this.entradas = dados.entradas ?? []; // 4)
+    this.grafo    = (dados.grafo ?? []).map((nodo) => new Nodo(nodo)); // 5)
+    this.saidas   = dados.saidas ?? [];   // 6)
   }
 
   // Métodos
