@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 /*  Definições:
   - O interpretador só será inicializado após o start do usuário.
   - E deve receber um Arquivo com blocos de funções representados pela classe ArqEntrada.
@@ -9,6 +11,44 @@
     as funções presentes nos operadores lógicos ou condicionais.
   - O interpretador deve ser capaz de executar programas com múltiplas funções.
 */
+
+function normalizarNodo(dados, indice) {
+  return {
+    idx: dados.idx ?? indice,
+    type: dados.type ?? dados.tipo ?? '',
+    ligacoes: dados.ligacoes ?? [],
+    entradas: dados.entradas ?? dados.inputs ?? [],
+    saidas: dados.saidas ?? dados.outputs ?? []
+  };
+}
+
+function normalizarFuncao(dados, indice) {
+  return {
+    id: dados.id ?? indice,
+    chamada: dados.chamada ?? dados.nome ?? '',
+    estado: dados.estado ?? 0,
+    entradas: dados.entradas ?? dados.inputs ?? [],
+    grafo: (dados.grafo ?? []).map(normalizarNodo),
+    saidas: dados.saidas ?? dados.outputs ?? []
+  };
+}
+
+export function normalizarArquivo(dados) {
+  return {
+    nome: dados.nome ?? '',
+    entradas: dados.entradas ?? [],
+    estado: dados.estado ?? 0,
+    lista: (dados.lista ?? []).map(normalizarFuncao),
+    saidas: dados.saidas ?? ''
+  };
+}
+
+export function lerArquivo(caminho) {
+  const texto = readFileSync(caminho, 'utf8');
+  return normalizarArquivo(JSON.parse(texto));
+}
+
+export default lerArquivo;
 
 /* Arquivo de entrada representa um programa que carrega uma lista de funções a serem executadas. 
   1) Nome do arquivo e chave única.
