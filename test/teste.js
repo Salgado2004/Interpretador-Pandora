@@ -1,5 +1,5 @@
-import { lerArquivo } from './Read.js';
-import Interpretador from './Interpretador.js';
+import { lerArquivo } from '../src/Read.js';
+import Interpretador from '../src/Interpretador.js';
 
 const caminho = process.argv[2];
 
@@ -9,7 +9,7 @@ if (!caminho) {
 } else {
   try {
     const arquivo = lerArquivo(caminho);
-    const programa = Interpretador(arquivo, { verbose: true });
+    const programa = Interpretador(arquivo, { verbose: false });
 
     console.log(`Programa: ${programa.nome}`);
     console.log(`Resultado: ${programa.resultado}`);

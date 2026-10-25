@@ -1,4 +1,4 @@
-# Interpretador Pandora
+## Pacote Node.js
 
 Protótipo de interpretador para a linguagem Pandora, uma linguagem visual e funcional baseada em grafos. O projeto executa programas representados como arquivos JSON, nos quais funções, operações e fluxos de dados são descritos por nodos e ligações.
 
@@ -305,3 +305,57 @@ A linguagem Pandora foi motivada por dois trabalhos:
 ## Licença e uso
 
 Este repositório contém um protótipo educacional e experimental. Consulte os autores e os termos associados aos artigos de referência antes de redistribuir os materiais originais.
+
+## Pacote Node.js
+
+Pacote Node.js do interpretador da linguagem visual Pandora. O núcleo é
+JavaScript ESM e pode ser empacotado para uso tanto na IDE web quanto em
+aplicações Node.js.
+
+### Desenvolvimento
+
+```powershell
+npm install
+npm test
+npm run build
+```
+
+O build gera `dist/index.js` (API compatível com navegador) e `dist/node.js`
+(API que também expõe `lerArquivo`, para ler JSON a partir do sistema de
+arquivos).
+
+### Uso
+
+O uso do pacote requer que o desenvolvedor importe o objeto do programa e executar o núcleo, sem depender de acesso a arquivos:
+
+```js
+import { Interpretador, normalizarArquivo } from '@pandora-lang/interpreter';
+
+const arquivo = normalizarArquivo(jsonDoEditor);
+const programa = Interpretador(arquivo);
+console.log(programa.resultado);
+```
+
+Durante o desenvolvimento local, o pacote pode ser usado como dependência local, adicionando a seguinte entrada no `package.json` da aplicação Node:
+
+```json
+{
+  "dependencies": {
+    "@pandora-lang/interpreter": "file:../Interpretador-Pandora"
+  }
+}
+```
+
+Para aplicações Node que precisam ler um arquivo JSON:
+
+```js
+import { lerArquivo, Interpretador } from '@pandora-lang/interpreter/node';
+
+const programa = Interpretador(lerArquivo('./programa.json'));
+```
+
+### Formato
+
+`normalizarArquivo` aceita os nomes canônicos do formato Pandora e também os
+aliases legados `tipo`, `inputs` e `outputs`. O último item de `lista` é a
+função de entrada, conforme o formato atual dos arquivos em `Testes/`.
