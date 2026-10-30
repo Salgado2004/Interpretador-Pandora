@@ -12,6 +12,10 @@ export default class Nodo{
     this.ligacoes   = dados.ligacoes ?? [];                 // 3) Lista de nodos seguintes
     this.entradas   = dados.entradas ?? dados.inputs ?? []; // 4) Entradas do nodo
     this.saidas     = dados.saidas ?? dados.outputs ?? [];  // 5) Saída do nodo
+    this.valor      = dados.valor ?? dados.value;            // Valor estruturado ou constante
+    this.funcao     = dados.funcao ?? dados.functionId;     // Função referenciada
+    this.padroes    = dados.padroes ?? dados.patterns ?? []; // Padrões do nodo match
+    this.nome       = dados.nome ?? dados.name;              // Nome de binding
   }
 
   /* Um nodo só pode executar quando todas as suas entradas receberam valores.
@@ -20,7 +24,9 @@ export default class Nodo{
     if (this.type === 'visor') {
       return this.entradas.some((entrada) => entrada !== '');
     }
-    return this.type === 'const' || this.entradas.length > 0 && this.entradas.every((entrada) => entrada !== '');
+    return ['const', 'list', 'func', 'function', 'ref', 'lambda'].includes(this.type)
+      || this.type === 'binding' && this.nome !== undefined
+      || this.entradas.length > 0 && this.entradas.every((entrada) => entrada !== '');
   }
 
   receberEntrada(valor) {
@@ -32,7 +38,7 @@ export default class Nodo{
     /* Calcula o resultado do nodo de acordo com seu tipo de operação.
       Quando ainda faltam entradas, retorna false sem alterar o nodo.
       Chamadas encp usam o resolvedor de funções do Programa. */
-    executar(resolverFuncao) {
+    executar(resolverFuncao, contexto = {}) {
     if (!this.pronto()) return false;
 
     const [primeira, segunda] = this.entradas;
@@ -44,7 +50,65 @@ export default class Nodo{
         resultado = primeira;
         break;
       case 'const':
-        resultado = this.entradas[0];
+        resultado = this.valor ?? this.entradas[0];
+        break;
+      case 'func':
+      case 'function':
+      case 'ref':
+      case 'lambda':
+        if (typeof this.funcao !== 'string' || this.funcao === '') {
+          throw new Error(`Referência de função ausente no nodo ${this.idx}`);
+        }
+        resultado = { kind: 'function', functionId: this.funcao };
+        break;
+      case 'list':
+        resultado = {
+          kind: 'list',
+          elements: (this.valor ?? this.entradas[0] ?? []).slice()
+        };
+        break;
+      case 'cons':
+        if (!segunda || segunda.kind !== 'list') {
+          throw new Error(`Nodo cons exige uma lista como segundo argumento no nodo ${this.idx}`);
+        }
+        resultado = {
+          kind: 'list',
+          elements: [primeira, ...segunda.elements]
+        };
+        break;
+      case 'head':
+        if (!primeira || primeira.kind !== 'list' || primeira.elements.length === 0) {
+          throw new Error(`Nodo head exige uma lista não vazia no nodo ${this.idx}`);
+        }
+        resultado = primeira.elements[0];
+        break;
+      case 'tail':
+        if (!primeira || primeira.kind !== 'list' || primeira.elements.length === 0) {
+          throw new Error(`Nodo tail exige uma lista não vazia no nodo ${this.idx}`);
+        }
+        resultado = {
+          kind: 'list',
+          elements: primeira.elements.slice(1)
+        };
+        break;
+      case 'isempty':
+      case 'is-empty':
+        if (!primeira || primeira.kind !== 'list') {
+          throw new Error(`Nodo is-empty exige uma lista no nodo ${this.idx}`);
+        }
+        resultado = primeira.elements.length === 0;
+        break;
+      case 'binding':
+        if (typeof this.nome !== 'string' || !(this.nome in (contexto.bindings ?? {}))) {
+          throw new Error(`Binding ${this.nome ?? ''} não está disponível no nodo ${this.idx}`);
+        }
+        resultado = contexto.bindings[this.nome];
+        break;
+      case 'apply':
+        if (typeof resolverFuncao !== 'function') {
+          throw new Error(`Nenhum resolvedor disponível para aplicação no nodo ${this.idx}`);
+        }
+        resultado = resolverFuncao(this.entradas[0], this.entradas.slice(1));
         break;
       case 'soma':
         resultado = primeira + segunda;
@@ -94,6 +158,9 @@ export default class Nodo{
         resultado = resolverFuncao(nomeFuncao, this.entradas);
         break;
       }
+      case 'match':
+        resultado = this.entradas[0];
+        break;
       default:
         throw new Error(`Tipo de nodo não suportado: ${this.type}`);
     }
