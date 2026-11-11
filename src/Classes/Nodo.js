@@ -128,6 +128,10 @@ export default class Nodo{
         if (segunda === 0) throw new Error('Divisão por zero');
         resultado = primeira / segunda;
         break;
+      case 'resto':
+        if (segunda === 0) throw new Error('Divisão por zero');
+        resultado = primeira % segunda;
+        break;
       case 'igual':
         resultado = primeira === segunda;
         break;

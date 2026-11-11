@@ -230,6 +230,7 @@ Os operadores aritméticos têm duas entradas, na ordem do vetor `inputs`.
 | `subs` | primeiro - segundo | `subs(10, 4) = 6` |
 | `mult` | primeiro * segundo | `mult(3, 4) = 12` |
 | `divs` | primeiro / segundo | `divs(12, 3) = 4` |
+| `resto` | resto de primeiro / segundo | `resto(17, 5) = 2` |
 
 Exemplo de nodo:
 

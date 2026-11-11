@@ -13,6 +13,37 @@ test('normaliza e executa um programa Pandora', async () => {
   assert.deepEqual(arquivo.saidas, [7]);
 });
 
+test('executa o resto da divisão e rejeita divisor zero', () => {
+  const programaResto = programa([{
+    id: 0,
+    chamada: 'main',
+    entradas: [],
+    grafo: [
+      node(0, 'const', [2], [17]),
+      node(1, 'const', [2], [5]),
+      node(2, 'resto', ['output'], ['', ''])
+    ]
+  }]);
+
+  assert.equal(Interpretador(programaResto).resultado, 2);
+
+  const programaDivisorZero = programa([{
+    id: 0,
+    chamada: 'main',
+    entradas: [],
+    grafo: [
+      node(0, 'const', [2], [17]),
+      node(1, 'const', [2], [0]),
+      node(2, 'resto', ['output'], ['', ''])
+    ]
+  }]);
+
+  assert.throws(
+    () => Interpretador(programaDivisorZero),
+    /Divisão por zero/
+  );
+});
+
 test('rejeita um arquivo sem funções', () => {
   assert.throws(
     () => Interpretador(normalizarArquivo({ nome: 'invalido', lista: [] })),

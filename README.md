@@ -124,6 +124,7 @@ O interpretador retorna o objeto `Programa`, que contém o resultado em `program
 | `subs` | Subtração |
 | `mult` | Multiplicação |
 | `divs` | Divisão |
+| `resto` | Resto da divisão |
 | `igual` | Teste de igualdade |
 | `ngual` | Teste de diferença |
 | `meno` | Teste de menor que |
