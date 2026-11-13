@@ -54,6 +54,8 @@ cálculos, comparar valores, chamar funções e selecionar caminhos condicionais
 | `ngual` | comparação | Testa diferença |
 | `meno` | comparação | Testa se o primeiro valor é menor |
 | `maio` | comparação | Testa se o primeiro valor é maior |
+| `and` | lógica | Retorna verdadeiro quando os dois valores booleanos são verdadeiros |
+| `or` | lógica | Retorna verdadeiro quando ao menos um dos valores booleanos é verdadeiro |
 | `encp` | composição | Chama uma função pelo nome |
 | `disor` | controle | Escolhe o ramo verdadeiro ou falso |
 | `visor` | controle | Reúne o resultado do ramo escolhido |

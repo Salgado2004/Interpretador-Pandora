@@ -144,6 +144,15 @@ export default class Nodo{
       case 'maio':
         resultado = primeira > segunda;
         break;
+      case 'and':
+      case 'or':
+        if (typeof primeira !== 'boolean' || typeof segunda !== 'boolean') {
+          throw new Error(`Nodo ${this.type} exige dois valores lógicos no nodo ${this.idx}`);
+        }
+        resultado = this.type === 'and'
+          ? primeira && segunda
+          : primeira || segunda;
+        break;
       case 'disor':
         if (typeof primeira !== 'boolean') {
           throw new Error(`Condicional disor exige um valor lógico no nodo ${this.idx}`);
