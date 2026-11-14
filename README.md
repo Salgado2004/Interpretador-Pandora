@@ -124,10 +124,13 @@ O interpretador retorna o objeto `Programa`, que contém o resultado em `program
 | `subs` | Subtração |
 | `mult` | Multiplicação |
 | `divs` | Divisão |
+| `resto` | Resto da divisão |
 | `igual` | Teste de igualdade |
 | `ngual` | Teste de diferença |
 | `meno` | Teste de menor que |
 | `maio` | Teste de maior que |
+| `and` | AND lógico; exige dois valores booleanos |
+| `or` | OR lógico; exige dois valores booleanos |
 | `encp` | Chamada de função definida pelo usuário |
 | `disor` | Seleção condicional de um ramo |
 | `visor` | Junção de resultados de ramos alternativos |

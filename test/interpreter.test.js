@@ -13,6 +13,79 @@ test('normaliza e executa um programa Pandora', async () => {
   assert.deepEqual(arquivo.saidas, [7]);
 });
 
+test('executa o resto da divisão e rejeita divisor zero', () => {
+  const programaResto = programa([{
+    id: 0,
+    chamada: 'main',
+    entradas: [],
+    grafo: [
+      node(0, 'const', [2], [17]),
+      node(1, 'const', [2], [5]),
+      node(2, 'resto', ['output'], ['', ''])
+    ]
+  }]);
+
+  assert.equal(Interpretador(programaResto).resultado, 2);
+
+  const programaDivisorZero = programa([{
+    id: 0,
+    chamada: 'main',
+    entradas: [],
+    grafo: [
+      node(0, 'const', [2], [17]),
+      node(1, 'const', [2], [0]),
+      node(2, 'resto', ['output'], ['', ''])
+    ]
+  }]);
+
+  assert.throws(
+    () => Interpretador(programaDivisorZero),
+    /Divisão por zero/
+  );
+});
+
+test('executa os operadores lógicos AND e OR somente com booleanos', () => {
+  for (const [primeira, segunda, esperadoAnd, esperadoOr] of [
+    [false, false, false, false],
+    [false, true, false, true],
+    [true, false, false, true],
+    [true, true, true, true]
+  ]) {
+    for (const [tipo, esperado] of [['and', esperadoAnd], ['or', esperadoOr]]) {
+      const arquivo = programa([{
+        id: 0,
+        chamada: 'main',
+        entradas: [],
+        grafo: [
+          node(0, 'const', [2], [primeira]),
+          node(1, 'const', [2], [segunda]),
+          node(2, tipo, ['output'], ['', ''])
+        ]
+      }]);
+
+      assert.equal(Interpretador(arquivo).resultado, esperado);
+    }
+  }
+
+  for (const tipo of ['and', 'or']) {
+    const arquivo = programa([{
+      id: 0,
+      chamada: 'main',
+      entradas: [],
+      grafo: [
+        node(0, 'const', [2], [true]),
+        node(1, 'const', [2], [1]),
+        node(2, tipo, ['output'], ['', ''])
+      ]
+    }]);
+
+    assert.throws(
+      () => Interpretador(arquivo),
+      new RegExp(`Nodo ${tipo} exige dois valores lógicos`)
+    );
+  }
+});
+
 test('rejeita um arquivo sem funções', () => {
   assert.throws(
     () => Interpretador(normalizarArquivo({ nome: 'invalido', lista: [] })),

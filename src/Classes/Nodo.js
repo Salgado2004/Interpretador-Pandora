@@ -128,6 +128,10 @@ export default class Nodo{
         if (segunda === 0) throw new Error('Divisão por zero');
         resultado = primeira / segunda;
         break;
+      case 'resto':
+        if (segunda === 0) throw new Error('Divisão por zero');
+        resultado = primeira % segunda;
+        break;
       case 'igual':
         resultado = primeira === segunda;
         break;
@@ -139,6 +143,15 @@ export default class Nodo{
         break;
       case 'maio':
         resultado = primeira > segunda;
+        break;
+      case 'and':
+      case 'or':
+        if (typeof primeira !== 'boolean' || typeof segunda !== 'boolean') {
+          throw new Error(`Nodo ${this.type} exige dois valores lógicos no nodo ${this.idx}`);
+        }
+        resultado = this.type === 'and'
+          ? primeira && segunda
+          : primeira || segunda;
         break;
       case 'disor':
         if (typeof primeira !== 'boolean') {
