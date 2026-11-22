@@ -1,6 +1,6 @@
 {
-  "name": "@pandora-lang/interpreter",
-  "version": "0.1.0",
+  "name": "@salgado2004/pandora-interpreter",
+  "version": "1.0.0",
   "description": "Interpretador da linguagem visual Pandora",
   "type": "module",
   "main": "./dist/index.js",
@@ -21,6 +21,10 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   },
   "devDependencies": {
     "esbuild": "^0.25.0"
