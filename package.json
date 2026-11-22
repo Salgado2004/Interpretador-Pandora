@@ -1,6 +1,6 @@
 {
-  "name": "@pandora-lang/interpreter",
-  "version": "0.1.0",
+  "name": "@salgado2004/pandora-interpreter",
+  "version": "1.0.0",
   "description": "Interpretador da linguagem visual Pandora",
   "type": "module",
   "main": "./dist/index.js",
